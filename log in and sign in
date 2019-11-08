@@ -1,0 +1,31 @@
+import java.io.*;
+import java.util.*;
+class Testdaemon1{    
+    public static void main (String[] args) throws Exception {  
+		 PriorityQueue<Integer> pq = new PriorityQueue<Integer>();
+		 PriorityQueue<Integer> pq1 = new PriorityQueue<Integer>(Collections.reverseOrder());
+		 int n,k;
+		 Scanner sc =new Scanner(System.in);
+		 n=sc.nextInt();
+		 k=sc.nextInt();
+		 int[] a=new int[n];
+		 for(int i=0; i<n; i++)
+		 	a[i]=sc.nextInt();
+		 for(int i=0; i<k; i++)
+		 {
+		 	pq.add(a[i]);
+		 	pq1.add(a[i]);
+		 }
+		 System.out.println("min = "+pq.peek());
+		 System.out.println("max = "+pq1.peek());
+		 for(int i=k; i<n; i++)
+		 {
+		 	pq.add(a[i]);
+		 	pq.remove(a[i-k]);
+			System.out.println("min = "+pq.peek());
+			pq1.add(a[i]);
+		 	pq1.remove(a[i-k]);
+			System.out.println("max = "+pq1.peek());
+		 }
+    }  
+}  
