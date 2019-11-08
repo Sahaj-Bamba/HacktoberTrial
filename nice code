@@ -1,0 +1,89 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define mod 1000000007
+#define ll long long int
+#define pb push_back
+#define mp make_pair
+#define fi first
+#define se second
+#define boost ios_base::sync_with_stdio(false);cin.tie(NULL);
+#define inf 9223372036854775807
+#define mini 9223372036854775807
+#include <ext/pb_ds/assoc_container.hpp> 
+#include <ext/pb_ds/tree_policy.hpp> 
+using namespace __gnu_pbds; 
+#define ordered_set tree<ll, null_type,less<ll>, rb_tree_tag,tree_order_statistics_node_update>
+pair<ll,ll>s4[4]={{-1,0},{1,0},{0,-1},{0,1}};
+pair<ll,ll>s8[8]={{-1,-1},{-1,0},{-1,1},{0,-1},{0,1},{1,1},{1,0},{1,-1}};
+ll power(ll a,ll b)
+{
+	if(b==0)
+		return 1;
+	ll c=power(a,b/2);
+	if(b%2==0)
+		return ((c%mod)*(c%mod))%mod;
+	else
+		return ((((c%mod)*(c%mod))%mod)*a)%mod;
+}
+vector<pair<ll,ll> >v[200005];
+ll dist[200005];
+ll dist2[200005];
+void dij(ll i)
+{
+	dist[i]=0;
+	priority_queue<pair<ll,ll>,vector<pair<ll,ll> >,greater<pair<ll,ll> > >pq;
+	pq.push(mp(0,i));
+	while(!pq.empty())
+	{
+		ll x=pq.top().fi;
+		ll y=pq.top().se;
+		pq.pop();
+		ll j;
+		for(j=0; j<v[y].size(); j++)
+		{
+			if(dist[v[y][j].fi]>dist[y]+v[y][j].se)
+			{
+				dist[v[y][j].fi]=dist[y]+v[y][j].se;
+				pq.push(mp(dist[v[y][j].fi],v[y][j].fi));
+			}
+		}
+	}
+}
+int main()
+{
+	boost
+	ll n,m,k;
+	cin>>n>>m>>k;
+	ll i,j;
+	for(i=0; i<200005; i++)
+		dist[i]=999999999999999;
+	for(i=0; i<m; i++)
+	{
+		ll x,y,z;
+		cin>>x>>y>>z;
+		v[x].pb(mp(y,z));
+		v[y].pb(mp(x,z));
+	}
+	dij(1);
+	for(i=0; i<200005; i++)
+		dist2[i]=dist[i];
+	ll count=0;
+	ll x[k],y[k];
+	map<pair<ll,ll>,ll>M;
+	for(i=0; i<k; i++)
+	{
+		cin>>x[i]>>y[i];
+		v[1].pb(mp(x[i],y[i]));
+		v[x[i]].pb(mp(1,y[i]));
+	}
+	dij(1);
+	for(i=0; i<k; i++)
+	{
+		if(dist[x[i]]<y[i] || dist[x[i]]>=dist2[x[i]] || M[{x[i],y[i]}]==1)
+			count++;
+		else
+			M[{x[i],y[i]}]=1;
+	}
+	cout<<count<<endl;
+	return 0;
+}
